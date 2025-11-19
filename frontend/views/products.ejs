@@ -1,0 +1,103 @@
+<%- include('../../partials/header') %>
+
+<div class="container py-5">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="display-5 fw-bold text-danger mb-4">
+        <i class="fas fa-crown"></i> QUẢN TRỊ SẢN PHẨM
+      </h1>
+
+      <% if (success && success.length > 0) { %>
+        <div class="alert alert-success"><%= success %></div>
+      <% } %>
+      <% if (error && error.length > 0) { %>
+        <div class="alert alert-danger"><%= error %></div>
+      <% } %>
+
+      <!-- Form thêm sản phẩm -->
+      <div class="card shadow-lg mb-5 border-0">
+        <div class="card-header bg-danger text-white">
+          <h4 class="mb-0"><i class="fas fa-plus"></i> Thêm sản phẩm mới</h4>
+        </div>
+        <div class="card-body">
+          <form action="/admin/add" method="POST">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <input type="text" name="name" class="form-control form-control-lg" placeholder="Tên sản phẩm" required>
+              </div>
+              <div class="col-md-3">
+                <input type="number" name="price" class="form-control form-control-lg" placeholder="Giá (VNĐ)" required>
+              </div>
+              <div class="col-md-8">
+                <input type="url" name="image" class="form-control form-control-lg" placeholder="Link ảnh[](https://...)" required>
+              </div>
+              <div class="col-md-12">
+                <textarea name="description" rows="3" class="form-control" placeholder="Mô tả sản phẩm"></textarea>
+              </div>
+              <div class="col-12">
+                <button class="btn btn-danger btn-lg px-5 shadow">
+                  <i class="fas fa-plus-circle"></i> Thêm ngay
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Danh sách sản phẩm -->
+      <h3 class="mb-4"><i class="fas fa-list"></i> Danh sách sản phẩm (<%= products.length %>)</h3>
+      <div class="row g-4">
+        <% products.forEach(p => { %>
+          <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow hover-card border-0">
+              <img src="<%= p.image %>" class="card-img-top" style="height:200px; object-fit:contain;">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title fw-bold"><%= p.name %></h5>
+                <p class="text-danger fw-bold fs-4"><%= p.price.toLocaleString('vi-VN') %>₫</p>
+                <p class="text-muted small"><%= p.description %></p>
+                
+                <div class="mt-auto d-grid gap-2">
+                  <!-- Sửa -->
+                  <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit<%= p._id %>">
+                    <i class="fas fa-edit"></i> Sửa
+                  </button>
+                  <!-- Xóa -->
+                  <form action="/admin/delete/<%= p._id %>" method="POST" class="d-inline">
+                    <button class="btn btn-danger" onclick="return confirm('Xóa thật hả bro?')">
+                      <i class="fas fa-trash"></i> Xóa
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal Sửa -->
+          <div class="modal fade" id="edit<%= p._id %>">
+            <div class="modal-dialog">
+              <form action="/admin/edit/<%= p._id %>" method="POST">
+                <div class="modal-content">
+                  <div class="modal-header bg-warning">
+                    <h5 class="modal-title">Sửa sản phẩm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    <input type="text" name="name" value="<%= p.name %>" class="form-control mb-3" required>
+                    <input type="number" name="price" value="<%= p.price %>" class="form-control mb-3" required>
+                    <input type="url" name="image" value="<%= p.image %>" class="form-control mb-3" required>
+                    <textarea name="description" class="form-control" rows="3"><%= p.description %></textarea>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Lưu thay đổi</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer') %>

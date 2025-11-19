@@ -1,0 +1,25 @@
+<%- include('../../frontend/views/partials/header') %>
+
+<div class="container py-5 text-center">
+  <h2 class="mb-4">Quét mã QR để thanh toán MoMo</h2>
+  <h4 class="text-danger mb-4"><%= total.toLocaleString() %>₫</h4>
+  <p>Mã đơn hàng: <strong><%= orderId %></strong></p>
+
+  <!-- Ảnh QR -->
+  <img src="<%= qrUrl %>" alt="QR MoMo" class="img-fluid shadow rounded" style="max-width: 320px;">
+
+  <div class="mt-4">
+    <p>Hoặc mở app MoMo và quét mã trên</p>
+    <a href="<%= payUrl %>" class="btn btn-danger btn-lg px-5">
+      Mở ví MoMo ngay
+    </a>
+  </div>
+
+  <div class="mt-4">
+    <small class="text-muted">
+      Sau khi thanh toán xong, bạn sẽ được chuyển về trang đơn hàng.
+    </small>
+  </div>
+</div>
+
+<%- include('../../frontend/views/partials/footer') %>

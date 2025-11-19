@@ -1,0 +1,58 @@
+<%- include('partials/header') %>
+
+<div class="container py-5 min-vh-100">
+  <% if (!product) { %>
+    <div class="text-center py-5">
+      <img src="https://cdni.iconscout.com/illustration/premium/thumb/product-not-found-4433869-3689597.png" width="300" alt="Không tìm thấy">
+      <h3 class="mt-4 text-danger">Sản phẩm không tồn tại!</h3>
+      <a href="/" class="btn btn-primary btn-lg mt-3">Quay lại trang chủ</a>
+    </div>
+  <% } else { %>
+    <div class="row g-5 align-items-start">
+      <!-- Cột ảnh -->
+      <div class="col-lg-6">
+        <div class="position-sticky" style="top: 100px;">
+          <img src="<%= product.image %>" 
+               class="img-fluid rounded-4 shadow-lg border"
+               style="width: 100%; max-height: 650px; object-fit: contain; background: #f8f9fa;"
+               alt="<%= product.name %>"
+               onerror="this.src='https://via.placeholder.com/600x600/6c757d/ffffff?text=Ảnh+không+tải+được'">
+        </div>
+      </div>
+
+      <!-- Cột thông tin -->
+      <div class="col-lg-6">
+        <h1 class="display-4 fw-bold text-primary mb-3"><%= product.name %></h1>
+        
+        <div class="d-flex align-items-center gap-3 mb-4">
+          <span class="badge bg-success fs-5 px-4 py-2">Còn hàng</span>
+          <small class="text-muted">Mã SP: <%= product._id %></small>
+        </div>
+
+        <div class="bg-light rounded-4 p-4 mb-4 border">
+          <h2 class="text-danger fw-bold display-5 mb-0">
+            <%= product.price.toLocaleString('vi-VN') %>₫
+          </h2>
+        </div>
+
+        <p class="lead text-muted mb-5 fs-5"><%= product.description %></p>
+
+        <div class="d-grid gap-3 d-md-flex">
+          <form action="/cart/add/<%= product._id %>" method="POST" class="d-inline">
+            <button class="btn btn-lg px-5 py-3 rounded-pill shadow-lg btn-warning text-white fw-bold fs-5">
+              Thêm vào giỏ hàng
+            </button>
+          </form>
+          <a href="/" class="btn btn-lg px-5 py-3 rounded-pill" 
+   style="background-color: #ff5722; color: white; border: none;">
+   Tiếp tục mua sắm
+</a>
+
+        </div>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+<%- include('partials/footer') %>

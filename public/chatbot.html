@@ -1,0 +1,112 @@
+<!-- public/chatbot.html -->
+<div id="chatbot-container" class="shadow-lg rounded-4 overflow-hidden" 
+     style="position:fixed; bottom:20px; right:20px; width:380px; height:550px; z-index:9999; border:1px solid #e2e8f0;">
+  <div class="bg-primary text-white p-4 d-flex justify-content-between align-items-center">
+    <div>
+      <h6 class="mb-0 fw-bold">MyShop Assistant</h6>
+      <small>Đang online • Trả lời trong 3 giây</small>
+    </div>
+    <button onclick="toggleChat()" class="btn-close btn-close-white"></button>
+  </div>
+
+  <div id="chat-messages" class="p-4 bg-light" style="height:380px; overflow-y:auto;">
+    <div class="text-center text-muted small my-3">
+      <i class="fas fa-robot fa-2x mb-2"></i><br>
+      Xin chào! Mình là trợ lý ảo của MyShop
+    </div>
+    <div class="bg-white rounded-3 p-3 mb-3 shadow-sm text-start">
+      Chào bạn! Bạn cần hỗ trợ gì hôm nay ạ?<br>
+      <small class="text-muted">Gõ: giá iPhone / giao hàng / bảo hành /...</small>
+    </div>
+  </div>
+
+  <div class="p-3 border-top bg-white">
+    <div class="input-group">
+      <input type="text" id="user-input" class="form-control rounded-start-pill border-0" 
+             placeholder="Nhập tin nhắn..." autocomplete="off">
+      <button onclick="sendMessage()" class="btn btn-primary rounded-end-pill">
+        Gửi
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Nút mở chatbot -->
+<div id="chatbot-toggle" onclick="toggleChat()" 
+     style="position:fixed; bottom:20px; right:20px; width:60px; height:60px; 
+            background:#3b82f6; border-radius:50%; box-shadow:0 8px 25px rgba(59,130,246,0.4);
+            cursor:pointer; z-index:9998; display:flex; align-items:center; justify-content:center;">
+  <i class="fas fa-comments fa-2x text-white"></i>
+</div>
+
+<script>
+// Danh sách câu trả lời tự động
+const responses = {
+  "chào|hello|hi|xin chào": "Chào bạn! Lady Mode có thể giúp gì cho bạn hôm nay ạ?",
+  "giá iphone|iphone bao nhiêu|giá 16 pro": "iPhone 16 Pro Max 256GB: 34.990.000₫\nGiá tốt nhất thị trường, bảo hành chính hãng 12 tháng!",
+  "giao hàng|giao tận đâu|ship": "Giao hàng miễn phí toàn quốc\nNhận hàng trong 24-48h (nội thành)\nThanh toán khi nhận hàng (COD)",
+  "bảo hành|bảo hành mấy năm": "Bảo hành chính hãng 12 tháng\n1 đổi 1 trong 30 ngày nếu lỗi\nHỗ trợ phần mềm trọn đời",
+  "có sẵn hàng không|hết hàng chưa": "Tất cả sản phẩm đều CÓ SẴN và sẵn sàng giao ngay hôm nay!",
+  "thanh toán|momo|trả góp": "Hỗ trợ:\n• Momo (giảm thêm 300k)\n• Thẻ tín dụng 0% lãi suất\n• Trả góp 0đ lãi suất",
+  "cảm ơn|thanks|cám ơn": "Rất vui được hỗ trợ bạn! Chúc bạn mua sắm vui vẻ"
+};
+
+// Gửi tin nhắn
+function sendMessage() {
+  const input = document.getElementById('user-input');
+  const message = input.value.trim().toLowerCase();
+  if (!message) return;
+
+  addMessage(message, 'user');
+  input.value = '';
+
+  setTimeout(() => {
+    let reply = "Xin lỗi mình chưa hiểu, bạn có thể hỏi lại được không ạ?";
+    
+    for (const [key, value] of Object.entries(responses)) {
+      if (new RegExp(key).test(message)) {
+        reply = value;
+        break;
+      }
+    }
+    
+    addMessage(reply, 'bot');
+  }, 800);
+}
+
+// Thêm tin nhắn vào khung chat
+function addMessage(text, sender) {
+  const messages = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = sender === 'user' 
+    ? 'bg-primary text-white rounded-3 p-3 mb-3 ms-auto text-end' 
+    : 'bg-white rounded-3 p-3 mb-3 shadow-sm text-start';
+  div.style.maxWidth = '85%';
+  div.innerHTML = text.replace(/\n/g, '<br>');
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+// Bấm Enter để gửi
+document.getElementById('user-input').addEventListener('keypress', e => {
+  if (e.key === 'Enter') sendMessage();
+});
+
+// Mở/đóng chatbot
+function toggleChat() {
+  const container = document.getElementById('chatbot-container');
+  const toggle = document.getElementById('chatbot-toggle');
+  if (container.style.display === 'none' || !container.style.display) {
+    container.style.display = 'block';
+    toggle.style.display = 'none';
+  } else {
+    container.style.display = 'none';
+    toggle.style.display = 'flex';
+  }
+}
+
+// Khởi động: ẩn khung chat, chỉ hiện nút tròn
+window.onload = () => {
+  document.getElementById('chatbot-container').style.display = 'none';
+};
+</script>

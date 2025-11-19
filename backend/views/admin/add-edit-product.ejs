@@ -1,0 +1,53 @@
+<%- include('../../partials/header') %>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <h1 class="display-5 fw-bold text-danger text-center mb-5">
+        <%= product ? 'SỬA SẢN PHẨM' : 'THÊM SẢN PHẨM MỚI' %>
+      </h1>
+
+      <div class="card shadow-lg border-0">
+        <div class="card-body p-5">
+          <form action="/admin/products/save" method="POST">
+            <% if (product) { %>
+              <input type="hidden" name="id" value="<%= product._id %>">
+            <% } %>
+
+            <div class="mb-4">
+              <label class="form-label fw-bold fs-5">Tên sản phẩm</label>
+              <input type="text" name="name" class="form-control form-control-lg" 
+                     value="<%= product ? product.name : '' %>" required>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-bold fs-5">Giá (VNĐ)</label>
+              <input type="number" name="price" class="form-control form-control-lg" 
+                     value="<%= product ? product.price : '' %>" required min="0">
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-bold fs-5">Link ảnh</label>
+              <input type="url" name="image" class="form-control form-control-lg" 
+                     value="<%= product ? product.image : '' %>" required 
+                     placeholder="https://example.com/product.jpg">
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-bold fs-5">Mô tả</label>
+              <textarea name="description" rows="5" class="form-control form-control-lg"><%= 
+                product ? product.description : '' %></textarea>
+            </div>
+
+            <div class="text-center">
+              <button type="submit" class="btn btn-success btn-lg px-5 shadow">
+                <%= product ? 'CẬP NHẬT' : 'THÊM MỚI' %>
+              </button>
+              <a href="/admin/products" class="btn btn-secondary btn-lg px-5">QUAY LẠI</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../../partials/footer') %>
