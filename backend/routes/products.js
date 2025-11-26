@@ -14,7 +14,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Chi tiết sản phẩm - QUAN TRỌNG NHẤT
 router.get('/product/:id', async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).lean();
@@ -31,5 +30,6 @@ router.get('/product/:id', async (req, res) => {
     res.redirect('/');
   }
 });
+
 
 module.exports = router;

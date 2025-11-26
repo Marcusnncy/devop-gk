@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>
+    <%= typeof pageTitle !== 'undefined' && pageTitle ? pageTitle : 'Admin Panel' %> - PhoneStore
+  </title>
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .sidebar { width: 280px; background: #2c3e50; min-height: 100vh; position: fixed; top: 0; left: 0; z-index: 1000; }
+    .main-content { margin-left: 280px; }
+    .nav-link { 
+      border-radius: 8px; margin: 5px 15px; padding: 12px 20px !important; 
+      color: #ecf0f1; transition: all 0.3s;
+    }
+    .nav-link:hover, .nav-link.active { 
+      background: #34495e; color: white !important; 
+    }
+    .nav-link i { width: 20px; text-align: center; margin-right: 10px; }
+    .alert { border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    body { background: #f5f7fa; }
+    .header-admin { background: white; border-bottom: 1px solid #dee2e6; }
+  </style>
+</head>
+<body class="bg-light">
+
+  <!-- Sidebar -->
+  <div class="sidebar text-white p-4">
+    <h3 class="text-center mb-5 fw-bold">
+      <i class="fas fa-crown text-warning"></i> ADMIN PANEL
+    </h3>
+    <nav class="nav flex-column">
+      <a href="/admin" class="nav-link <%= (typeof path !== 'undefined' && path === '/admin') ? 'active bg-primary' : '' %>">
+        <i class="fas fa-home"></i> Dashboard
+      </a>
+      <a href="/admin/products" class="nav-link <%= (typeof path !== 'undefined' && path && path.includes('products')) ? 'active bg-primary' : '' %>">
+        <i class="fas fa-box"></i> Quản lý sản phẩm
+      </a>
+      <a href="/admin/orders" class="nav-link">
+        <i class="fas fa-shopping-cart"></i> Đơn hàng
+      </a>
+      <hr class="border-secondary opacity-50">
+      <a href="/" class="nav-link text-info"><i class="fas fa-store"></i> Xem cửa hàng</a>
+      <a href="/auth/logout" class="nav-link text-danger"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header-admin shadow-sm p-4 d-flex justify-content-between align-items-center">
+      <h2 class="mb-0 text-primary fw-bold">
+        <%= typeof pageTitle !== 'undefined' && pageTitle ? pageTitle : 'Admin Panel' %>
+      </h2>
+      <div class="text-end">
+        <i class="fas fa-user-circle fa-3x text-primary mb-2"></i><br>
+        <strong class="text-dark"><%= (user && user.username) ? user.username : 'Admin' %></strong>
+      </div>
+    </div>
+
+    <!-- Flash Messages -->
+    <div class="container-fluid px-4 py-3">
+      <% if (typeof success !== 'undefined' && success && success.length > 0) { %>
+        <div class="alert alert-success alert-dismissible fade show shadow">
+          <i class="fas fa-check-circle"></i> <%= success %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <% } %>
+      <% if (typeof error !== 'undefined' && error && error.length > 0) { %>
+        <div class="alert alert-danger alert-dismissible fade show shadow">
+          <i class="fas fa-exclamation-triangle"></i> <%= error %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <% } %>
+
+      <!-- Nội dung trang con -->
+      <%- body %>
+    </div>
+  </div>
+
+  <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

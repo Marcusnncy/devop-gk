@@ -28,4 +28,20 @@ router.get('/products/edit/:id', adminCtrl.editProductPage);
 router.post('/products/save', adminCtrl.addEditProduct);
 router.post('/products/delete/:id', adminCtrl.deleteProduct);
 
+// QUẢN LÝ ĐƠN HÀNG
+router.get('/orders', async (req, res) => {
+  try {
+    const orders = await Order.find().sort({ createdAt: -1 });
+    res.render('admin/orders', {
+      pageTitle: 'Quản lý đơn hàng',
+      path: '/admin/orders',
+      orders: orders || []
+    });
+  } catch (err) {
+    console.log(err);
+    req.flash('error', 'Lỗi tải đơn hàng');
+    res.redirect('/admin');
+  }
+});
+
 module.exports = router;

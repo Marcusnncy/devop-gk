@@ -14,21 +14,17 @@ const orderItemSchema = new mongoose.Schema({
 });
 
 const orderSchema = new mongoose.Schema({
-  orderId: { type: String, required: true, unique: true }, // Mã MoMo trả về
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  items: [orderItemSchema],
-  totalAmount: { type: Number, required: true },
-  status: {
-    type: String,
-    enum: ['pending', 'completed', 'cancelled'],
-    default: 'pending'
-  },
-  paymentMethod: { type: String, default: 'momo' },
-  createdAt: { type: Date, default: Date.now }
-});
+  customerName: String,
+  phone: String,
+  address: String,
+  items: [{
+    product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    name: String,
+    price: Number,
+    qty: Number
+  }],
+  total: Number,
+  status: { type: String, default: 'pending' } // pending, processing, completed, cancelled
+}, { timestamps: true });
 
 module.exports = mongoose.model('Order', orderSchema);

@@ -1,50 +1,50 @@
-<%- include('../../partials/header') %>
-<div class="container py-5">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="display-5 fw-bold text-danger">QUẢN LÝ SẢN PHẨM</h1>
-    <a href="/admin/products/add" class="btn btn-success btn-lg shadow">
-      <i class="fas fa-plus"></i> THÊM SẢN PHẨM
-    </a>
+<% layout('admin/layout') -%>
+<% pageTitle = 'Quản lý sản phẩm' %>
+<% path = '/admin/products' %>
+
+<div class="d-flex justify-content-between align-items-center mb-5">
+  <h1 class="display-5 fw-bold text-danger">
+    <i class="fas fa-box"></i> QUẢN LÝ SẢN PHẨM
+  </h1>
+  <a href="/admin/products/add" class="btn btn-success btn-lg shadow px-5">
+    <i class="fas fa-plus"></i> Thêm sản phẩm
+  </a>
+</div>
+
+<% if (!products || products.length === 0) { %>
+  <div class="text-center py-5">
+    <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-box-2517-2517-2517-2517.png" alt="Empty" style="width:300px;">
+    <h3 class="text-muted mt-4">Chưa có sản phẩm nào</h3>
+    <a href="/admin/products/add" class="btn btn-primary btn-lg mt-3">Thêm sản phẩm đầu tiên</a>
   </div>
-
-  <% if (success) { %>
-    <div class="alert alert-success alert-dismissible fade show">
-      <%= success %> <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-  <% } %>
-  <% if (error) { %>
-    <div class="alert alert-danger alert-dismissible fade show">
-      <%= error %> <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-  <% } %>
-
-  <% if (!products || products.length === 0) { %>
-    <div class="text-center py-5">
-      <h3 class="text-muted">Chưa có sản phẩm nào</h3>
-      <a href="/admin/products/add" class="btn btn-primary btn-lg">Thêm sản phẩm đầu tiên</a>
-    </div>
-  <% } else { %>
-    <div class="row g-4">
-      <% products.forEach(p => { %>
-        <div class="col-md-6 col-lg-4">
-          <div class="card shadow h-100">
-            <img src="<%= p.image %>" class="card-img-top" style="height:220px; object-fit:contain; background:#f8f9fa;">
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title fw-bold"><%= p.name %></h5>
-              <p class="text-danger fs-4 fw-bold"><%= Number(p.price).toLocaleString('vi-VN') %>đ</p>
-              <div class="mt-auto d-grid gap-2">
-                <a href="/admin/products/edit/<%= p._id %>" class="btn btn-warning">SỬA</a>
-                <form action="/admin/products/delete/<%= p._id %>" method="POST" class="d-inline">
-                  <button type="submit" class="btn btn-danger" onclick="return confirm('Xóa thật hả admin?')">
-                    XÓA
-                  </button>
-                </form>
-              </div>
+<% } else { %>
+  <div class="row g-4">
+    <% products.forEach(p => { %>
+      <div class="col-md-6 col-lg-4">
+        <div class="card shadow h-100 hover-shadow transition">
+          <img src="<%= p.image %>" class="card-img-top" style="height:220px; object-fit:contain; background:#f8f9fa; padding:10px;">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title fw-bold text-truncate"><%= p.name %></h5>
+            <p class="text-danger fs-4 fw-bold"><%= Number(p.price).toLocaleString('vi-VN') %>đ</p>
+            <p class="text-muted small"><%= p.description?.substring(0, 60) %>...</p>
+            <div class="mt-auto d-grid gap-2">
+              <a href="/admin/products/edit/<%= p._id %>" class="btn btn-warning">
+                <i class="fas fa-edit"></i> SỬA
+              </a>
+              <form action="/admin/products/delete/<%= p._id %>" method="POST" class="d-inline">
+                <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Xóa thật hả admin?')">
+                  <i class="fas fa-trash"></i> XÓA
+                </button>
+              </form>
             </div>
           </div>
         </div>
-      <% }) %>
-    </div>
-  <% } %>
-</div>
-<%- include('../../partials/footer') %>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+
+<style>
+  .hover-shadow { transition: all 0.3s; }
+  .hover-shadow:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.15) !important; }
+</style>

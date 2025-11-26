@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  backend:
+    image: ${DOCKERHUB_USERNAME}/mern-backend:latest
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - PORT=8081
+      - MONGO_URI=${MONGO_URI}
+    # KHÔNG cần publish port ra ngoài
+    expose:
+      - "8081"
+
+  frontend:
+    image: ${DOCKERHUB_USERNAME}/mern-frontend:latest
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "80:80"   # public chỉ 80 (sau này thêm 443 khi bật HTTPS)
+

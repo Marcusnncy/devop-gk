@@ -1,53 +1,71 @@
-<%- include('../../partials/header') %>
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-8">
-      <h1 class="display-5 fw-bold text-danger text-center mb-5">
-        <%= product ? 'SỬA SẢN PHẨM' : 'THÊM SẢN PHẨM MỚI' %>
-      </h1>
+<% layout('admin/layout') -%>
+<% pageTitle = product ? 'Sửa sản phẩm' : 'Thêm sản phẩm mới' %>
+<% path = '/admin/products' %>
 
-      <div class="card shadow-lg border-0">
-        <div class="card-body p-5">
-          <form action="/admin/products/save" method="POST">
-            <% if (product) { %>
-              <input type="hidden" name="id" value="<%= product._id %>">
-            <% } %>
+<div class="row justify-content-center">
+  <div class="col-lg-10">
+    <h1 class="display-5 fw-bold text-danger text-center mb-5">
+      <i class="fas fa-mobile-alt"></i> 
+      <%= product ? 'SỬA SẢN PHẨM' : 'THÊM SẢN PHẨM MỚI' %>
+    </h1>
 
-            <div class="mb-4">
-              <label class="form-label fw-bold fs-5">Tên sản phẩm</label>
-              <input type="text" name="name" class="form-control form-control-lg" 
-                     value="<%= product ? product.name : '' %>" required>
+    <div class="card shadow-lg border-0">
+      <div class="card-body p-5">
+        <form action="/admin/products/save" method="POST" enctype="multipart/form-data">
+          <% if (product) { %>
+            <input type="hidden" name="id" value="<%= product._id %>">
+          <% } %>
+
+          <div class="row g-4">
+            <div class="col-md-8">
+              <div class="mb-4">
+                <label class="form-label fw-bold fs-5 text-primary">Tên sản phẩm</label>
+                <input type="text" name="name" class="form-control form-control-lg" 
+                       value="<%= product ? product.name : '' %>" required>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-bold fs-5 text-primary">Giá (VNĐ)</label>
+                <input type="number" name="price" class="form-control form-control-lg" 
+                       value="<%= product ? product.price : '' %>" required min="0">
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-bold fs-5 text-primary">Link ảnh</label>
+                <input type="url" name="image" class="form-control form-control-lg" 
+                       value="<%= product ? product.image : '' %>" required 
+                       placeholder="https://example.com/product.jpg">
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-bold fs-5 text-primary">Mô tả</label>
+                <textarea name="description" rows="6" class="form-control form-control-lg"><%= 
+                  product ? product.description : '' %></textarea>
+              </div>
             </div>
 
-            <div class="mb-4">
-              <label class="form-label fw-bold fs-5">Giá (VNĐ)</label>
-              <input type="number" name="price" class="form-control form-control-lg" 
-                     value="<%= product ? product.price : '' %>" required min="0">
+            <div class="col-md-4 text-center">
+              <% if (product && product.image) { %>
+                <div class="border rounded p-3 bg-light">
+                  <p class="text-muted small mb-2">Xem trước ảnh</p>
+                  <img src="<%= product.image %>" class="img-fluid rounded shadow" style="max-height: 380px;">
+                </div>
+              <% } else { %>
+                <div class="bg-light border rounded d-flex align-items-center justify-content-center" style="height: 380px;">
+                  <p class="text-muted fs-4">Chưa có ảnh xem trước</p>
+                </div>
+              <% } %>
             </div>
+          </div>
 
-            <div class="mb-4">
-              <label class="form-label fw-bold fs-5">Link ảnh</label>
-              <input type="url" name="image" class="form-control form-control-lg" 
-                     value="<%= product ? product.image : '' %>" required 
-                     placeholder="https://example.com/product.jpg">
-            </div>
-
-            <div class="mb-4">
-              <label class="form-label fw-bold fs-5">Mô tả</label>
-              <textarea name="description" rows="5" class="form-control form-control-lg"><%= 
-                product ? product.description : '' %></textarea>
-            </div>
-
-            <div class="text-center">
-              <button type="submit" class="btn btn-success btn-lg px-5 shadow">
-                <%= product ? 'CẬP NHẬT' : 'THÊM MỚI' %>
-              </button>
-              <a href="/admin/products" class="btn btn-secondary btn-lg px-5">QUAY LẠI</a>
-            </div>
-          </form>
-        </div>
+          <div class="text-center mt-5">
+            <button type="submit" class="btn btn-success btn-lg px-5 shadow mx-2">
+              <%= product ? 'CẬP NHẬT SẢN PHẨM' : 'THÊM MỚI NGAY' %>
+            </button>
+            <a href="/admin/products" class="btn btn-secondary btn-lg px-5 mx-2">QUAY LẠI</a>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </div>
-<%- include('../../partials/footer') %>
